@@ -1,8 +1,12 @@
+import logging
 import random
 import sys
 import threading
 import time
 from queue import Queue
+
+LOG_FORMAT = '%(asctime)s %(threadName)-17s %(levelname)-8s %(message)s'
+logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 
 # Ensure we have the correct amount of arguments (6 + the script name)
 if len(sys.argv) != 7:
@@ -52,7 +56,7 @@ def instance_manager(instance_id):
         dps_list = [dps_q.get() for _ in range(3)]
 
         # Run the instance (dungeon)
-        print(f"Instance {instance_id}: active")
+        logging.info(f"Instance {instance_id+1}: active")
         dungeon_time = random.randint(t1, t2)
         # print(f"Instance {instance_id}: running for {dungeon_time} seconds")  # debug
         time.sleep(dungeon_time)  # Simulates the time spent in the dungeon
@@ -62,7 +66,7 @@ def instance_manager(instance_id):
         instances_summary[instance_id]['time_served'] += dungeon_time
 
         # Instance becomes empty again
-        print(f"Instance {instance_id}: empty")
+        logging.info(f"Instance {instance_id+1}: empty")
         instances_sem.release()
 
 # Adding players to the queues
@@ -85,4 +89,4 @@ for thread in instance_threads:
 
 # Printing summary
 for i, summary in enumerate(instances_summary):
-    print(f"Instance {i} served {summary['parties_served']} parties and was active for {summary['time_served']} seconds.")
+    print(f"Instance {i+1} served {summary['parties_served']} parties and was active for {summary['time_served']} seconds.")
