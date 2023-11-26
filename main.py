@@ -61,6 +61,8 @@ def instance_manager(instance_id):
         # print(f"Instance {instance_id}: running for {dungeon_time} seconds")  # debug
         time.sleep(dungeon_time)  # Simulates the time spent in the dungeon
 
+        # NOTE: If dungeon_time is 1, given the input of 400, 400, and 1200 for t1, t2, and n, respectively, all threads will be active for 4 seconds
+
         # Update summary information
         instances_summary[instance_id]['parties_served'] += 1
         instances_summary[instance_id]['time_served'] += dungeon_time
