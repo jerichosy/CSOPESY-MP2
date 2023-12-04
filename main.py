@@ -97,7 +97,8 @@ parties = 0
 for i, summary in enumerate(instances_summary):
     print(f"Instance {i+1} served {summary['parties_served']} parties and was active for {summary['time_served']} seconds.")
     parties += summary['parties_served']
-# print(len(tank_q.queue))
-# print(len(healer_q.queue))
-# print(len(dps_q.queue))
 print(f"Total parties served: {parties}")
+print("Leftovers:")
+print(f"Tank: {tank_q.qsize()}/{t}")
+print(f"Healer: {healer_q.qsize()}/{h}")
+print(f"DPS: {dps_q.qsize()}/{d}")
