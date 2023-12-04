@@ -26,15 +26,8 @@ except ValueError:  # Catch any conversion errors
     print("All arguments must be integers.")
     sys.exit(1)
 
-# print(f"Max concurrent instances: {n}")
-# print(f"Number of tank players: {t}")
-# print(f"Number of healer players: {h}")
-# print(f"Number of DPS players: {d}")
-# print(f"Minimum instance time: {t1}")
-# print(f"Maximum instance time: {t2}")
-
 # Synchronization variables
-instances = threading.Lock()  # Limits number of active instances
+instances = threading.Lock()
 tank_q = Queue(maxsize=t)
 healer_q = Queue(maxsize=h)
 dps_q = Queue(maxsize=d)
@@ -64,15 +57,12 @@ def instance_manager(instance_id):
         # print(f"Instance {instance_id}: running for {dungeon_time} seconds")  # debug
         time.sleep(dungeon_time)  # Simulates the time spent in the dungeon
 
-        # NOTE: If dungeon_time is 1, given the input of 400, 400, and 1200 for t1, t2, and n, respectively, all threads will be active for 4 seconds
-
         # Update summary information
         instances_summary[instance_id]['parties_served'] += 1
         instances_summary[instance_id]['time_served'] += dungeon_time
 
         # Instance becomes empty again
         logging.info(f"Instance {instance_id+1}: empty")
-        # instances.release()
 
 # Adding players to the queues
 for _ in range(t):
