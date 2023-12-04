@@ -27,7 +27,7 @@ except ValueError:  # Catch any conversion errors
     sys.exit(1)
 
 # Synchronization variables
-instances = threading.Lock()
+lock = threading.Lock()
 tank_q = Queue(maxsize=t)
 healer_q = Queue(maxsize=h)
 dps_q = Queue(maxsize=d)
@@ -38,10 +38,10 @@ instances_summary = [{'parties_served': 0, 'time_served': 0} for _ in range(n)]
 def instance_manager(instance_id):
     while True:
         # logging.info('Waiting')
-        instances.acquire()
+        lock.acquire()
         # Check if there are enough players of each role to form a party
         if not all([tank_q.qsize() >= 1, healer_q.qsize() >= 1, dps_q.qsize() >= 3]):
-            instances.release()
+            lock.release()
             break  # Break the loop if we cannot form a standard party
 
         # Forming a party
@@ -49,7 +49,7 @@ def instance_manager(instance_id):
         healer = healer_q.get()
         dps_list = [dps_q.get() for _ in range(3)]
 
-        instances.release()
+        lock.release()
 
         # Run the instance (dungeon)
         logging.info(f"Instance {instance_id+1}: active")
